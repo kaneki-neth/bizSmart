@@ -11,10 +11,10 @@ class CategoryController extends Controller
     public function index(Request $request)
     {
         $name = "";
-        $description = "";
         $daily_rate = "";
         $hourly_rate = "";
         $max_occupancy = "";
+        $status = "";
 
         $query = DB::table('categories');
 
@@ -33,18 +33,20 @@ class CategoryController extends Controller
             $query->where('hourly_rate', 'like', '%' . $hourly_rate . '%');
         }
 
-        if ($request->has('description')) {
-            $description = $request->description;
-            $query->where('description', 'like', '%' . $description . '%');
-        }
-
         if ($request->has('max_occupancy')) {
             $max_occupancy = $request->max_occupancy;
             $query->where('max_occupancy', 'like', '%' . $max_occupancy . '%');
         }
 
+        if ($request->has('status') && in_array($request->input('status'), ['0', '1'])) {
+            $query->where('enabled', $request->input('status'));
+            $status = $request->input('status');
+        }
+
+
+
         $categories = $query->get();
-        return view('rooms.category.index', compact('categories', 'name', 'daily_rate', 'hourly_rate', 'description', 'max_occupancy'));
+        return view('rooms.category.index', compact('categories', 'name', 'daily_rate', 'hourly_rate', 'max_occupancy', 'status'));
     }
 
     public function create()

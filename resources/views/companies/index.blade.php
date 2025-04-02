@@ -41,14 +41,14 @@
                     <div class="row">
                         <div class="col-md-2">
                             <div class="mb-3">
-                                <label for="company" class="form-label">Name</label>
-                                <input type="text" class="form-control form-control-sm" id="company" value="{{ $company }}"
-                                    name="company" placeholder="..." autocomplete="off">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control form-control-sm" id="name" value="{{ $name }}"
+                                    name="name" placeholder="..." autocomplete="off">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="mb-3">
-                                <label for="penalty" class="form-label">Status</label>
+                                <label for="status" class="form-label">Status</label>
                                 <select class="form-control form-control-sm select2" id="status" name="status">
                                     <option value="">All</option>
                                     <option value="1" {{ $status == 1 ? 'selected' : '' }}>Enabled</option>
@@ -142,7 +142,7 @@
         });
 
         function clearsearchfield() {
-            $("#penalty").val('');
+            $("#name").val('');
             $("#status").val('').trigger('change');
         }
 

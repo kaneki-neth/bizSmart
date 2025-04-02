@@ -41,14 +41,21 @@
                     <div class="row">
                         <div class="col-md-2">
                             <div class="mb-3">
-                                <label for="name" class="form-label">Name</label>
+                                <label for="name" class="form-label">Last Name</label>
                                 <input type="text" class="form-control form-control-sm" id="name" value="{{ $name }}"
                                     name="name" placeholder="..." autocomplete="off">
                             </div>
                         </div>
                         <div class="col-md-2">
                             <div class="mb-3">
-                                <label for="penalty" class="form-label">Status</label>
+                                <label for="company" class="form-label">Company</label>
+                                <input type="text" class="form-control form-control-sm" id="company" value="{{ $company }}"
+                                    name="company" placeholder="..." autocomplete="off">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Status</label>
                                 <select class="form-control form-control-sm select2" id="status" name="status">
                                     <option value="">All</option>
                                     <option value="1" {{ $status == 1 ? 'selected' : '' }}>Enabled</option>
@@ -56,7 +63,6 @@
                                 </select>
                             </div>
                         </div>
-
                         <div class="col-md-2">
                             <div class="d-flex" style="margin-top:22px">
                                 <button class="btn btn-primary btn-xs m-1"> Search</button>
@@ -76,6 +82,7 @@
                             <th class="text-center">Name</th>
                             <th class="text-center">Email</th>
                             <th class="text-center">Contact Number</th>
+                            <th class="text-center">Address</th>
                             <th class="text-center">Company</th>
                             <th class="text-center">Status</th>
                         </tr>
@@ -89,10 +96,11 @@
                                 </td>
                                 <td class="text-center">{{ $guest->email}}</td>
                                 <td class="text-center">{{ $guest->contact_number}}</td>
+                                <td class="text-center">{{ $guest->address_1 }}</td>
                                 @if($guest->company_name)
                                     <td class="text-center">{{ $guest->company_name}}</td>
                                 @else
-                                    <td class="text-center">-</td>
+                                    <td class="text-center">Not connected to any company</td>
                                 @endif
                                 @if($guest->enabled == 1)
                                     <td class="text-center"><span class="badge bg-success">Active</span></td>
@@ -144,7 +152,8 @@
         });
 
         function clearsearchfield() {
-            $("#penalty").val('');
+            $("#name").val('');
+            $("#company").val('');
             $("#status").val('').trigger('change');
         }
 

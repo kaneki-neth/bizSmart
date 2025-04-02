@@ -13,30 +13,35 @@ class RoomController extends Controller
         $floor_number = '';
         $category = '';
         $status = '';
+        $enabled = '';
 
         $query = DB::table('rooms')
             ->join('categories', 'rooms.c_id', '=', 'categories.c_id')
             ->select('rooms.r_id', 'rooms.room_number', 'rooms.floor_number', 'rooms.status', 'rooms.enabled', 'categories.name as category_name');
 
-        if ($request->has('room_number')) {
+        if ($request->filled('room_number')) {
             $query->where('rooms.room_number', 'like', '%' . $request->room_number . '%');
             $room_number = $request->room_number;
         }
 
-        if ($request->has('floor_number')) {
-            $query->where('rooms.floor_number', 'like', '%' . $request->floor_number . '%');
+        if ($request->filled('floor_number')) {
+            $query->where('rooms.floor_number', $request->floor_number);
             $floor_number = $request->floor_number;
         }
 
-        if ($request->has('category')) {
+        if ($request->filled('category')) {
             $query->where('categories.name', 'like', '%' . $request->category . '%');
             $category = $request->category;
         }
 
-        $status = $request->input('status');
-        if ($request->has('status')) {
-            $query->where('rooms.status', 'like', '%' . $request->status . '%');
+        if ($request->filled('status')) {
+            $query->where('rooms.status', $request->status);
             $status = $request->status;
+        }
+
+        if ($request->filled('enabled') && in_array($request->input('enabled'), ['0', '1'])) {
+            $query->where('rooms.enabled', $request->input('enabled'));
+            $enabled = $request->input('enabled');
         }
 
         $rooms = $query
@@ -44,9 +49,9 @@ class RoomController extends Controller
             ->paginate(15)
             ->appends($request->except('page'));
 
-        $statuses = DB::table('rooms')->distinct()->pluck('status');
+        $stats = DB::table('rooms')->distinct()->pluck('status');
 
-        return view('rooms.index', compact('room_number', 'floor_number', 'category', 'status', 'rooms', 'statuses'));
+        return view('rooms.index', compact('room_number', 'floor_number', 'category', 'status', 'enabled', 'rooms', 'stats'));
     }
 
     public function create()

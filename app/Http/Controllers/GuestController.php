@@ -13,24 +13,32 @@ class GuestController extends Controller
     {
         $name = "";
         $status = "";
+        $company = "";
 
         $query = DB::table('guests')
             ->leftJoin('companies', 'guests.company_id', '=', 'companies.c_id')
             ->select('guests.*', 'companies.name as company_name');
 
         if ($request->has('name')) {
-            $query->where('first_name', 'like', '%' . $request->name . '%');
+            $query->where('last_name', 'like', '%' . $request->name . '%');
             $name = $request->name;
         }
 
-        if ($request->has('status')) {
-            $query->where('enabled', $request->status);
-            $status = $request->status;
+        if ($request->has('status') && in_array($request->input('status'), ['0', '1'])) {
+            $query->where('guests.enabled', $request->input('status'));
+            $status = $request->input('status');
         }
 
-        $guests = $query->get();
+        if ($request->has('company')) {
+            $query->where('companies.name', 'like', '%' . $request->company . '%');
+            $company = $request->company;
+        }
 
-        return view('guests.index', compact('guests', 'name', 'status'));
+        $guests = $query
+            ->paginate(15)
+            ->appends($request->except('page'));
+
+        return view('guests.index', compact('guests', 'name', 'status', 'company'));
     }
 
     public function create()

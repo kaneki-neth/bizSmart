@@ -58,6 +58,15 @@
                                 value="{{ $hourly_rate }}" placeholder="..." autocomplete="off">
                         </div>
 
+                        <div class="col-lg-2 col-md-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-control custom-input select2" id="status" name="status">
+                                <option value="" selected>All</option>
+                                <option value="1" {{ $status == 1 ? 'selected' : '' }}>Active</option>
+                                <option value="0" {{ $status == 0 ? 'selected' : '' }}>Inactive</option>
+                            </select>
+                        </div>
+
                         <div class="col-lg-2 col-md-3 mt-2">
                             <div class="d-flex" style="margin-top:8%">
                                 <button class="btn btn-primary btn-xs px-2 m-1"> Search</button>
@@ -115,6 +124,10 @@
     <script>
         $('#categories').addClass('active');
 
+        $(document).ready(function () {
+            $('.select2').select2();
+        });
+
         var tblrows = 0;
         var height = screen.height;
         $("#pannel-body").attr("style", 'height: 78vh;');
@@ -133,6 +146,7 @@
             $("#name").val('');
             $("#daily_rate").val('');
             $("#hourly_rate").val('');
+            $("#status").val('').trigger('change');
         }
 
         function add_category() {

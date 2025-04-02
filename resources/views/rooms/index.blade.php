@@ -66,10 +66,32 @@
                                 <label for="status" class="form-label">Status</label>
                                 <select class="form-control form-control-sm select2" id="status" name="status"
                                     placeholder="..." autocomplete="off">
-                                    <option value="">Select Status</option>
-                                    @foreach($statuses as $status)
-                                        <option value="{{ $status }}">{{ $status }}</option>
-                                    @endforeach
+                                    @if ($status)
+                                        <option value="">All</option>
+                                        <option value="{{ $status }}" selected>{{ $status }}</option>
+                                        @foreach ($stats as $stat)
+                                            @if($status != $stat)
+                                                <option value="{{ $stat }}">{{ $stat }}</option>
+                                            @endif
+                                        @endforeach
+                                    @else
+                                        <option value="" selected>All</option>
+                                        @foreach ($stats as $stat)
+                                            <option value="{{ $stat }}">{{ $stat }}</option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-3">
+                            <div class="mb-3">
+                                <label for="enabled" class="form-label">Enabled</label>
+                                <select class="form-control form-control-sm select2" id="enabled" name="enabled"
+                                    placeholder="..." autocomplete="off">
+                                    <option value="">All</option>
+                                    <option value="1" {{ $enabled == 1 ? 'selected' : '' }}>Active</option>
+                                    <option value="0" {{ $enabled == 0 ? 'selected' : '' }}>Inactive</option>
                                 </select>
                             </div>
                         </div>
@@ -154,6 +176,7 @@
         $(document).ready(function () {
             $('#status').select2();
             $('#category').select2();
+            $('#enabled').select2();
         });
 
         $("#rooms").addClass("active");
@@ -207,8 +230,8 @@
             $("#room_number").val('');
             $("#floor_number").val('');
             $("#category").val('');
-            $("#status").val('');
-            $("#status").select2().trigger('change');
+            $("#status").val('').trigger('change');
+            $("#enabled").val('').trigger('change');
         }
 
     </script>

@@ -114,7 +114,7 @@
     <script src="/assets/plugins/datatables.net-scroller-bs5/js/scroller.bootstrap5.min.js"></script>
 
     <script>
-        $('#amenities').addClass('active');
+        $('#amenity_items').addClass('active');
 
         $(document).ready(function () {
             $('.select2').select2();

@@ -11,14 +11,14 @@ class CompanyController extends Controller
 {
     public function index(Request $request)
     {
-        $company = "";
+        $name = "";
         $status = "";
 
         $query = DB::table('companies');
 
-        if ($request->has('company')) {
-            $query->where('name', 'like', '%' . $request->company . '%');
-            $company = $request->company;
+        if ($request->has('name')) {
+            $query->where('name', 'like', '%' . $request->name . '%');
+            $name = $request->name;
         }
 
         if ($request->has('status') && in_array($request->input('status'), ['0', '1'])) {
@@ -26,9 +26,12 @@ class CompanyController extends Controller
             $status = $request->input('status');
         }
 
-        $companies = $query->get();
+        $companies = $query
+            ->orderBy('companies.name', 'asc')
+            ->paginate(15)
+            ->appends($request->except('page'));
 
-        return view('companies.index', compact('companies', 'company', 'status'));
+        return view('companies.index', compact('companies', 'name', 'status'));
     }
 
     public function create()
